@@ -5,16 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import eu.acolombo.harmonized.ui.theme.CustomColor
 import eu.acolombo.harmonized.ui.theme.HarmonizedColorsTheme
+import eu.acolombo.harmonized.ui.theme.LocalHarmonizedColor
 import eu.acolombo.harmonized.ui.theme.LocalHarmonizedColors
 
 class MainActivity : ComponentActivity() {
@@ -24,12 +29,31 @@ class MainActivity : ComponentActivity() {
             HarmonizedColorsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.background(LocalHarmonizedColors.current.accent),
-                    )
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Greeting(
+                            name = "Custom color",
+                            backgroundColor = CustomColor,
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Greeting(
+                            name = "Harmonized custom color",
+                            backgroundColor = LocalHarmonizedColor.current.harmonizedCustomColor,
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Greeting(
+                            name = "Harmonized custom color accent",
+                            backgroundColor = LocalHarmonizedColors.current.accent,
+                            textColor = LocalHarmonizedColors.current.onAccent,
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Greeting(
+                            name = "Harmonized custom color accent container",
+                            backgroundColor = LocalHarmonizedColors.current.accentContainer,
+                            textColor = LocalHarmonizedColors.current.onAccentContainer,
+                        )
+                    }
                 }
             }
         }
@@ -37,11 +61,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting(
+    name: String,
+    backgroundColor: Color,
+    modifier: Modifier = Modifier,
+    textColor: Color = LocalHarmonizedColors.current.onAccent,
+) {
     Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        color = LocalHarmonizedColors.current.onAccent,
+        text = name,
+        modifier = modifier
+            .background(
+                color = backgroundColor,
+                shape = MaterialTheme.shapes.extraLarge,
+            )
+            .padding(16.dp),
+        color = textColor,
     )
 }
 
@@ -49,6 +83,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     HarmonizedColorsTheme {
-        Greeting("Android")
+        Greeting("Android", CustomColor)
     }
 }
