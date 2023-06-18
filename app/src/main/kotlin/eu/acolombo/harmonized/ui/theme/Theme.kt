@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -51,11 +52,28 @@ fun HarmonizedColorsTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    val harmonizedColor = if (dynamicColor) {
+        DynamicHarmonizedColor.get(colorScheme)
+    } else {
+        DefaultHarmonizedColor.get()
+    }
+
+    val harmonizedColors = if (dynamicColor) {
+        DynamicHarmonizedColors.get(colorScheme, darkTheme)
+    } else {
+        DefaultHarmonizedColors.get(darkTheme)
+    }
+
+    CompositionLocalProvider(
+        LocalHarmonizedColor provides harmonizedColor,
+        LocalHarmonizedColors provides harmonizedColors,
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }
 
 /**
